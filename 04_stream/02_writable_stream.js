@@ -1,7 +1,14 @@
 const fs = require('fs');
 
+// 追加
+// const writeStream = fs.createWriteStream('./text.txt', {
+//   flags: 'a+',
+// });
+
+// 指定位置写入，覆盖已存在内容
 const writeStream = fs.createWriteStream('./text.txt', {
-  flags: 'a+',
+  flags: 'r+',
+  start: 6,
 });
 
 writeStream.on('open', (fd) => {
