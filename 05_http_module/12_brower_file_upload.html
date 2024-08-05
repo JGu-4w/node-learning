@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <input type="file" />
+    <button>Upload</button>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+      const buttonEl = document.querySelector('button');
+
+      buttonEl.onclick = function () {
+        // 1.创建表单对象
+        const formData = new FormData();
+        // 2.将选中的文件放入表单
+        const inputEl = document.querySelector('input');
+        formData.set('phtot', inputEl.files[0]);
+        // 3.发送 post 请求
+        axios({
+          method: 'post',
+          url: 'http://localhost:8000',
+          data: formData,
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+      };
+    </script>
+  </body>
+</html>
