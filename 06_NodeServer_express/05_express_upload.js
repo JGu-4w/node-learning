@@ -1,5 +1,6 @@
 const express = require('express');
 const multer = require('multer');
+const path = require('path');
 
 const app = express();
 
@@ -10,7 +11,7 @@ const upload = multer({
       callback(null, './uploads');
     },
     filename(req, file, callback) {
-      callback(null, `${Date.now()}_${file.originalname}`);
+      callback(null, `${Date.now()}_${path.extname(file.originalname)}`);
     },
   }),
 });
