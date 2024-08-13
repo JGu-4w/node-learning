@@ -1,4 +1,5 @@
 const express = require('express');
+const multer = require('multer');
 
 const app = express();
 
@@ -31,6 +32,12 @@ app.post('/login', (req, res, next) => {
 });
 
 app.post('/register', (req, res, next) => {
+  console.log(req.body);
+});
+
+// multer 解析 form-data
+const formdata = multer();
+app.post('/formdata', formdata.any(), (req, res, next) => {
   console.log(req.body);
 });
 
