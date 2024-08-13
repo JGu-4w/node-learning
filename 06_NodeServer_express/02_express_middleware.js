@@ -20,6 +20,26 @@ app.get('/login', (req, res, next) => {
   res.end('get request');
 });
 
+// 注册多个中间件，用于拆分复杂操作
+app.get(
+  '/home',
+  (req, res, next) => {
+    console.log('get /home middleware1');
+    next();
+  },
+  (req, res, next) => {
+    console.log('get /home middleware2');
+    next();
+  },
+  (req, res, next) => {
+    console.log('get /home middleware3');
+    next();
+  },
+  (req, res, next) => {
+    console.log('get /home middleware4');
+  }
+);
+
 app.listen(8000, () => {
   console.log('Start Listening...');
 });
