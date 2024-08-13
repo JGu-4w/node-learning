@@ -15,6 +15,10 @@ app.get('/list', (req, res, next) => {
 // 解析 params
 app.get('/list/:id/:page', (req, res, next) => {
   console.log(req.params);
+
+  // 设置状态码
+  res.status(201);
+
   res.json({
     code: 0,
     message: 'ok',
