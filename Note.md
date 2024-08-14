@@ -15,7 +15,7 @@
 
 - .use() 任何请求都能匹配
 
-**服务器返回错误信息的两种方案**
+**express 服务器返回错误信息的两种方案**
 
 - 返回 http 错误码
 
@@ -33,3 +33,24 @@ res.json({
   message: '未授权访问',
 });
 ```
+
+**koa context 中的请求响应对象**
+
+```js
+const Koa = require('koa');
+
+const app = new Koa();
+
+app.use((ctx, next) => {
+  // 请求对象
+  console.log(ctx.request); // koa 封装的请求对象
+  console.log(ctx.req); // node 封装的请求对象
+  // 响应对象
+  console.log(ctx.response); // koa 封装的响应对象
+  console.log(ctx.res); // node 封装的响应对象
+});
+
+app.listen(8000, () => {});
+```
+
+- koa 中 .use 无法监听路径，需要使用 koa-router 或 @koa/router 第三方中间件实现路径监听
