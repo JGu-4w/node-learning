@@ -20,7 +20,7 @@ const upload = multer({
 });
 
 // 注册路由
-const uploadRouter = KoaRouter({ prefix: '/upload' });
+const uploadRouter = new KoaRouter({ prefix: '/upload' });
 // 单文件上传
 uploadRouter.post('/avatar', upload.any('avatar'), (ctx, next) => {
   console.log(ctx.request.files);

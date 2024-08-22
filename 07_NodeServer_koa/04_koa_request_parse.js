@@ -7,7 +7,7 @@ const app = new Koa();
 const formdata = multer();
 app.use(bodyParser());
 
-const userRouter = KoaRouter({ prefix: '/user' });
+const userRouter = new KoaRouter({ prefix: '/user' });
 
 userRouter.get('/', (ctx, next) => {
   // query (?attr1=value1&attr2=value2)
