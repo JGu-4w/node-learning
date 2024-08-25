@@ -54,3 +54,85 @@ app.listen(8000, () => {});
 ```
 
 - koa 中 .use 无法监听路径，需要使用 koa-router 或 @koa/router 第三方中间件实现路径监听
+
+
+
+**express 和 koa 的区别**
+
+设计架构不同
+
+- express 是完整且强大的，内置了很多功能
+- koa 更加简洁、自由，只包含最核心的功能，并不会对使用其他中间件进行任何限制。
+- 目前架构的趋势偏向于简洁化，参考 React 和 Vue 3 (去除了 EventBus)
+
+执行中间件机制不同
+
+* 执行同步代码时**无区别**
+
+  * koa 按照洋葱模型的执行顺序(调用next()后立即执行下一个中间件，执行完所有中间件后往回再执行)
+
+    ```js
+    app.use((ctx, next) => {
+      console.log('koa middleware 01');
+      msg += 'a';
+      next();
+      ctx.body = msg;
+    });
+    
+    app.use((ctx, next) => {
+      console.log('koa middleware 02');
+      msg += 'b';
+      next();
+    });
+    
+    app.use((ctx, next) => {
+      console.log('koa middleware 03');
+      msg += 'c';
+      next();
+    });
+    
+    // response: abc
+    ```
+
+  * express 中间件执行同步代码时类似
+
+* 执行异步代码时**有区别**
+
+  * koa 需要在每个 next() 前添加 await 变为同步，否则不会等待异步代码执行完成
+
+    ```js
+    app.use(async (ctx, next) => {
+      console.log('koa middleware 01');
+      msg += 'a';
+      await next();
+      console.log('koa middleware 01 next');
+      msg += 'e';
+      ctx.body = msg;
+    });
+    
+    app.use(async (ctx, next) => {
+      console.log('koa middleware 02');
+      msg += 'b';
+      await next();
+      console.log('koa middleware 02 next');
+      msg += 'd';
+    });
+    
+    app.use(async (ctx, next) => {
+      console.log('koa middleware 03');
+      msg += 'c';
+      const res = await fetch('http://localhost:8001');
+      const data = await res.json();
+      console.log(data);
+    });
+    
+    // response:
+    // koa middleware 01
+    // koa middleware 02
+    // koa middleware 03
+    // { code: 0, data: [ { id: 1 }, { id: 2 } ] }
+    // koa middleware 02 next
+    // koa middleware 01 next
+    ```
+
+  * express 执行异步操作只能在最后的中间件中返回结果，无法通过 async/await 的方式等待请求完成后再返回前面的中间件返回结果（因为 express 的 next 是 void 类型，koa 的 next 是 Promise 类型）

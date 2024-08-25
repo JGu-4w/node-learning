@@ -1,0 +1,14 @@
+{
+  "name": "08_koa_express",
+  "version": "1.0.0",
+  "description": "",
+  "main": "01_koa_sync_middleware.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "koa": "^2.15.3"
+  }
+}
