@@ -1,3 +1,5 @@
+# Node
+
 **为什么需要使用 Buffer**
 
 - 在需要对二进制进行操作的时候可以使用 Buffer
@@ -136,3 +138,58 @@ app.listen(8000, () => {});
     ```
 
   * express 执行异步操作只能在最后的中间件中返回结果，无法通过 async/await 的方式等待请求完成后再返回前面的中间件返回结果（因为 express 的 next 是 void 类型，koa 的 next 是 Promise 类型）
+
+
+
+## MySQL
+
+**设置外键**
+
+```mysql
+ALTER TABLE `products` ADD `brand_id` INT;
+ALTER TABLE `products` ADD FOREIGN KEY (brand_id) REFERENCES `brands`(id);
+```
+
+**编辑外键**
+
+```mysql
+-- 获取已经设置的 FOREIGN KEY
+SHOW CREATE TABLE `products`;
+-- 获取已经设置的 FOREIGN KEY，并新增删除更新时操作
+-- restrict / no action / cascade / set null
+ALTER TABLE `products` DROP FOREIGN KEY `products_ibfk_1`;
+ALTER TABLE `products` ADD FOREIGN KEY (brand_id) REFERENCES `brands`(id)
+			ON DELETE RESTRICT
+			ON UPDATE CASCADE;
+```
+
+**左连接 (LEFT [OUTER] JOIN)**
+
+```mysql
+-- 希望获取左表所有数据
+SELECT * FROM `products` LEFT JOIN `brands` ON products.brand_id = brands.id;
+```
+
+**内连接 ([INNER / CROSS] JOIN)**
+
+表示左边的表与右边的表都有对应的数据关联
+
+```mysql
+-- 与 SELECT * FROM `products`, `brands` WHERE products.brand_id = brands.id 的区别
+-- 两张表连接时就会约束数据关系，决定查询结果
+SELECT * FROM `products` JOIN `brands` ON products.brand_id = brands.id;
+```
+
+**全连接**
+
+```mysql
+-- MySQL 不支持全连接(FULL JOIN)，通过左连接 UNION 右连接来实现
+(SELECT * FROM `products` LEFT JOIN `brands` ON products.brand_id = brands.id)
+UNION
+(SELECT * FROM `products` RIGHT JOIN `brands` ON products.brand_id = brands.id)
+```
+
+**多对多关系**
+
+- 建立一张关系表
+
