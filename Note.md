@@ -193,3 +193,22 @@ UNION
 
 - 建立一张关系表
 
+**查询结果转对象 (JSON_OBJECT())**
+
+```mysql
+SELECT
+	products.id as id, products.title as title, products.price as price,
+	JSON_OBJECT('brand_id', brands.id, 'brand_name', brands.`name`) as brand
+FROM `products` LEFT JOIN `brands` ON products.brand_id = brands.id;
+```
+
+**查询结果转数组 (JSON_ARRAYAGG)**
+
+```mysql
+SELECT
+	brand,
+	JSON_ARRAYAGG(JSON_OBJECT('pid', pid, 'title', title, 'price', price)) as list
+FROM products
+GROUP BY products.brand;
+```
+

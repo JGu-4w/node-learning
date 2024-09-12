@@ -68,3 +68,16 @@ UPDATE `brands` SET id = 99 WHERE name = '华为';
 SELECT * FROM `products` LEFT JOIN `brands` ON products.brand_id = brands.id;
 -- 内连接
 SELECT * FROM `products` JOIN `brands` ON products.brand_id = brands.id;
+
+-- 查询结果转对象
+SELECT
+	products.id as id, products.title as title, products.price as price,
+	JSON_OBJECT('brand_id', brands.id, 'brand_name', brands.`name`) as brand
+FROM `products` LEFT JOIN `brands` ON products.brand_id = brands.id;
+
+-- 查询结果转数组
+SELECT
+	brand,
+	JSON_ARRAYAGG(JSON_OBJECT('pid', pid, 'title', title, 'price', price)) as list
+FROM products
+GROUP BY products.brand;
