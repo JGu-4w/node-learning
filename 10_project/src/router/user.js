@@ -1,9 +1,8 @@
 const KoaRouter = require('@koa/router');
+const userController = require('../controller/user');
 
 const userRouter = new KoaRouter({ prefix: '/user' });
 
-userRouter.get('/list', (ctx, next) => {
-  ctx.body = '/user/list';
-});
+userRouter.post('/', userController.create);
 
 module.exports = userRouter;
