@@ -3,6 +3,7 @@ const {
   NAME_OR_PASSWORD_IS_EMPTY,
   NAME_IS_ALREADY_EXISTS,
 } = require('../config/error');
+const { md5 } = require('../utils/md5');
 
 const verifyUser = async (ctx, next) => {
   // 校验用户名和密码
@@ -19,4 +20,10 @@ const verifyUser = async (ctx, next) => {
   await next();
 };
 
-module.exports = { verifyUser };
+const encodePassword = async (ctx, next) => {
+  const { password } = ctx.request.body;
+  ctx.request.body.password = md5(password);
+  await next();
+};
+
+module.exports = { verifyUser, encodePassword };
