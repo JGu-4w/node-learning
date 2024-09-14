@@ -141,7 +141,7 @@ app.listen(8000, () => {});
 
 
 
-## MySQL
+# MySQL
 
 **设置外键**
 
@@ -210,5 +210,74 @@ SELECT
 	JSON_ARRAYAGG(JSON_OBJECT('pid', pid, 'title', title, 'price', price)) as list
 FROM products
 GROUP BY products.brand;
+```
+
+
+
+# Cookie
+
+**cookie 和 session 的缺点**
+
+- Cookie 会被附加在每个 HTTP 请求中，增加了流量；
+- Cookie 是明文传递，存在安全问题；
+- Cookie大小限制是 4KB；
+- 对于浏览器外的客户端 (IOS, Android)，须手动设置 cookie 和 session；
+- 对于分布式系统和服务器集群中如何保证其他系统可以正确解析 session？
+
+
+
+# JWT
+
+- 安装依赖
+
+```bash
+npm install jsonwebtoken
+```
+
+- HS256 对称加密
+
+```js
+// 生成 token
+const jwt = require('jsonwebtoken');
+const payload = { id: 1, username: 'root' }
+const token = jwt.sign(payload, secretKey, {
+    expiresIn: 60, // 秒
+    algorithm: 'HS256'
+})
+// 验证 token
+const result = jwt.verify(token, secretKey, {
+    algorithms: ['HS256']
+})
+```
+
+- RS256 非对称加密
+
+```bash
+# 打开 openssl
+$ openssl
+# 生成私钥
+OpenSSL> genrsa -out private.key 2048
+# 从私钥生成公钥
+OpenSSL> rsa -in private.key -pubout -out public.key
+```
+
+```js
+const jwt = require('jsonwebtoken');
+const fs = require('fs')
+const path = require('path')
+
+// 生成 token
+const PRIVATE_KEY = fs.readFileSync(pth.resolve(__dirname, './private.key'))
+const token = jwt.sign(payload, PRIVATE_KEY, {
+  expiresIn: 24 * 60 * 60,
+  algorithm: 'RS256',
+});
+
+// 校验 token
+const { authorization } = ctx.headers;
+const token = authorization.replace('Bearer ', '');
+const res = jwt.verify(token, PUBLIC_KEY, {
+	algorithms: ['RS256'],
+});  // { id: 8, name: 'abc', iat: 1726293370, exp: 1726379770 }
 ```
 
