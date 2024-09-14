@@ -3,7 +3,7 @@ const {
   NAME_OR_PASSWORD_IS_EMPTY,
   NAME_IS_ALREADY_EXISTS,
 } = require('../config/error');
-const { md5 } = require('../utils/md5');
+const { md5 } = require('../utils/md5Handler');
 
 const verifyUser = async (ctx, next) => {
   // 校验用户名和密码
@@ -12,7 +12,7 @@ const verifyUser = async (ctx, next) => {
     ctx.app.emit('error', NAME_OR_PASSWORD_IS_EMPTY, ctx);
     return;
   }
-  const [users] = await userService.getUserByName(name);
+  const users = await userService.getUserByName(name);
   if (users.length) {
     ctx.app.emit('error', NAME_IS_ALREADY_EXISTS, ctx);
     return;

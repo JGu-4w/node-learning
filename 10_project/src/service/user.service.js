@@ -11,7 +11,7 @@ class UserService {
   // 查询用户是否存在
   async getUserByName(name) {
     const statement = 'SELECT * FROM `users` WHERE name = ?;';
-    const res = await pool.execute(statement, [name]);
+    const [res] = await pool.execute(statement, [name]);
     return res;
   }
 }
